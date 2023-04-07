@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
         });
 
         const users = await getLoginUser({ _id: decoded._id });
-        console.log(users);
+        // console.log(users);
         if (!users.length > 0)
             throw new UnauthorizedError(
                 "Can't found User. Please create new account"
@@ -27,7 +27,7 @@ module.exports = async (req, res, next) => {
         if (!(user.tokens.includes(JWToken))) throw new UnauthorizedError("Expired auth token")
 
 
-        req.nativeRequest.setUser = user;
+        req.nativeRequest.setUser = {username: user.username,email: user.email, userId: user._id};
         req.nativeRequest.setUserId = user._id;
         req.nativeRequest.setJWToken = JWToken;
 

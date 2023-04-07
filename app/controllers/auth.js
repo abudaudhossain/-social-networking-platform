@@ -1,7 +1,8 @@
 const NotAcceptableError = require("../exceptions/NotAcceptableError");
 const handlers = require("../exceptions/handlers");
 const native = require("../helpers/native");
-const { getAccessToken } = require("../helpers/utility");
+const { getAccessToken, getToken } = require("../helpers/utility");
+const { createNewProfile } = require("../services/profile");
 const { getUser, createNewUser, getLoginUser, updateUser } = require("../services/user");
 const { ObjExists } = require("../validation/validationHelpers/validationHelper");
 const bcrypt = require("bcrypt");
@@ -11,7 +12,7 @@ module.exports = {
     reg: async (req, res) => {
         try {
 
-            const { phone, email, password } = req.body;
+            const { name, email, password } = req.body;
 
             //  @validation part
             ObjExists(["name", "email", "password"], req.body);
@@ -25,17 +26,29 @@ module.exports = {
             // @Business logic part
 
             // create employee
+            let username = getToken(name.split(" ")[0])
             const saveUser = {
-                ...req.body,
+                username,
+                email,
+                password
             };
             console.log("saveUser", saveUser);
             const newUser = await createNewUser(saveUser);
-            newUser.password = "";
+
+            if (!newUser._id) throw new Error("Server Problem")
+
+            const saveProfileInfo = {
+                name,
+                user: newUser._id,
+                email
+            }
+            console.log(saveProfileInfo);
+            const newProfile = await createNewProfile(saveProfileInfo)
 
             native.response({
                 'responseCode': 'INSERTION_SUCCESSFUL',
                 'errorLog': {},
-                'data': newUser,
+                'data': newProfile,
                 'status': 200
             }, req, res);
 
@@ -52,7 +65,7 @@ module.exports = {
             }, req, res)
         }
     },
-    
+
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
@@ -64,14 +77,13 @@ module.exports = {
             if (!users.length > 0)
                 throw new UnauthorizedError("User Can't Found. Please Register First");
             // console.log(users);
-            const { name, _id } = users[0];
+            const { _id } = users[0];
             if (!bcrypt.compareSync(password, users[0].password)) {
                 throw new UnauthorizedError("Password Wrong");
             }
             const accessToken = getAccessToken(
                 {
                     _id,
-                    name,
                     logAt: new Date(),
                 },
                 process.env.JWT_KEY

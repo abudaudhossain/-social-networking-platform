@@ -1,53 +1,40 @@
 const mongoose = require("mongoose");
 
 const field = {
-    name: {
-        type: String,
-        trim: true,
-        required: [true, "User name is required"],
-      },
-      designation: {
-        type: String,
-      },
-      email: {
-        type: String,
-        required: [true, "User email is required"],
-        unique: [true, "Name must be unique"],
-      },
-      phone: {
-        type: String,
-        unique: [true, "Name must be unique"],
-      },
-      password: {
-        type: String,
-        required: [true, "User account password is required"],
-      },
-      image: {
-        type: String,
-        default: null
-      },
-      socialMediaAccounts:[
-        {
-            name:{
-                type: String,
-            },
-            link:{
-                type: String
-            }
-        }
-      ],
-    
-      existence: {
-        // true false
-        type: Boolean,
-        default: true,
-      },
-     
-      logAt: {
-        type: Date,
-      },
+  username: {
+    type: String,
+    trim: true,
+    required: [true, "User name is required"],
+  },
+  email: {
+    type: String,
+    required: [true, "User email is required"],
+    unique: [true, "Email must be unique"],
+  },
+  password: {
+    type: String,
+    required: [true, "User account password is required"],
+  },
 
-      tokens: [String],
+  existence: {
+    // true false
+    type: Boolean,
+    default: true,
+  },
+  status: {
+    type: String,
+    default: "active",
+    enum: {
+      values: ["active", "inactive"],
+      message: "User role value can't be {VALUE}, must be active/inactive",
+    },
+  },
+
+  logAt: {
+    type: Date,
+  },
+
+  tokens: [String],
 }
 
 

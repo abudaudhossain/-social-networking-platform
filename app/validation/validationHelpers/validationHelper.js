@@ -1,3 +1,4 @@
+const NotAcceptableError = require("../../exceptions/NotAcceptableError");
 const NotFoundError = require("../../exceptions/NotFountError");
 const ValidationError = require("../../exceptions/ValidationError");
 
@@ -15,5 +16,19 @@ module.exports = {
             if (!data[i]) throw new ValidationError("All properties are required, can not send empty properties");
             else if (data[i].length === 0) throw new ValidationError("All properties are required, can not send empty properties");
         }
-    }
+    },
+    updateInfoValidation: (keys) => {
+        const query = [
+            "password",
+            "_id",
+            "createdBy",
+            "socialMediaAccounts"
+        ];
+        for (let i = 0; i < keys.length; i++) {
+            if (!(query.indexOf(keys[i]) === -1))
+                throw new NotAcceptableError(
+                    `Can't Update ${keys[i]} properties`
+                );
+        }
+    },
 }

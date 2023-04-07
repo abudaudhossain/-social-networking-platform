@@ -9,7 +9,7 @@ module.exports = {
                 'responseCode': 'LIST_LOADED',
                 'errorLog': {},
                 'data': {
-                    "type": req.nativeRequest.setUser,
+                    "type": "Social Networking System",
                 },
                 'status': 200
             }, req, res);
