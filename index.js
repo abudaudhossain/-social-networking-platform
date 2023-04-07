@@ -27,7 +27,7 @@ db.on("error", (error) => console.log(error));
 db.once('open', () => console.log("Mong DB connect success"));
 
 
-app.use('/', require('./routes/api'))
+app.use('/api', require('./routes/api'))
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`)

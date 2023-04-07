@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 module.exports = {
     getToken: (content) => {
 
@@ -21,4 +23,9 @@ module.exports = {
 
         return content + numberToken()
     },
+
+    getAccessToken: (data) => {
+        console.log(process.env.JWT_KEY);
+        return jwt.sign(data, process.env.JWT_KEY, {expiresIn: "30 days"});
+      },
 }
