@@ -22,12 +22,17 @@ module.exports = {
             "password",
             "_id",
             "createdBy",
-            "socialMediaAccounts"
+            "socialMediaAccounts",
+            "likes",
+            "comments",
+            "shares",
+            "user"
+            
         ];
         for (let i = 0; i < keys.length; i++) {
             if (!(query.indexOf(keys[i]) === -1))
                 throw new NotAcceptableError(
-                    `Can't Update ${keys[i]} properties`
+                    `Can't Added ${keys[i]} properties`
                 );
         }
     },

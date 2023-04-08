@@ -44,6 +44,8 @@ module.exports = {
             }
             console.log(saveProfileInfo);
             const newProfile = await createNewProfile(saveProfileInfo)
+            let result = updateUser({ _id: newUser._id }, { user: newProfile._id })
+            console.log(result);
 
             native.response({
                 'responseCode': 'INSERTION_SUCCESSFUL',

@@ -16,6 +16,12 @@ const field = {
     required: [true, "User account password is required"],
   },
 
+  user: {
+    // @relation
+    type: mongoose.Types.ObjectId,
+    ref: "AppProfile",
+  }, 
+
   existence: {
     // true false
     type: Boolean,

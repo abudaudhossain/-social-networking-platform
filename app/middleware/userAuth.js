@@ -29,6 +29,7 @@ module.exports = async (req, res, next) => {
 
         req.nativeRequest.setUser = {username: user.username,email: user.email, userId: user._id};
         req.nativeRequest.setUserId = user._id;
+        req.nativeRequest.setProfile = user.user;
         req.nativeRequest.setJWToken = JWToken;
 
         next();

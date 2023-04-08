@@ -39,6 +39,12 @@ const field = {
         }
     ],
 
+    connections: [
+        {// @relation
+            type: mongoose.Types.ObjectId,
+            ref: "AppUser",
+        }
+    ],
 
     existence: {
         // true false
