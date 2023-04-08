@@ -37,9 +37,15 @@ const field = {
     shares: [
         {// @relation
             type: mongoose.Types.ObjectId,
-            ref: "AppUser",
+            ref: "AppProfile",
         }
     ],
+    sharesPost:
+    {// @relation
+        type: mongoose.Types.ObjectId,
+        ref: "AppPost",
+    }
+    ,
 
     existence: {
         // true false

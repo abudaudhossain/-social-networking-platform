@@ -5,7 +5,7 @@ const { updateInfoValidation } = require("../validation/validationHelpers/valida
 const { getUser, updateUser } = require("../services/user");
 const ValidationError = require("../exceptions/ValidationError");
 const NotAcceptableError = require("../exceptions/NotAcceptableError");
-const { getUserProfile, updateUserProfile, getBasicProfileInfo } = require("../services/profile");
+const { getUserProfile, updateUserProfile, getBasicProfileInfo, getUserConnectionList } = require("../services/profile");
 
 module.exports = {
     userProfile: async (req, res) => {
@@ -265,6 +265,36 @@ module.exports = {
                 res
             );
         }
-    }
+    },
+
+    userConnectionList: async (req, res) => {
+        // console.log(req.nativeRequest.setUser)
+
+
+        try {
+            const userId = req.nativeRequest.setUserId;
+
+            const usersProfile = await getUserConnectionList({ user: userId }, { name: 1, email: 1, user: 1, image: 1 });
+
+
+
+            native.response({
+                'responseCode': 'LIST_LOADED',
+                'errorLog': {},
+                'data': usersProfile,
+                'status': 200
+            }, req, res);
+        } catch (error) {
+            console.log(error)
+            handlers({
+                'errorLog': {
+                    'location': req.originalUrl.split("/").join("::"),
+                    'query': `USER PROFILE TO WEBSITE BLOCK`,
+                    'details': `Error : ${error}`
+                },
+                error
+            }, req, res)
+        }
+    },
 
 }

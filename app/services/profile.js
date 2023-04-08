@@ -36,5 +36,9 @@ module.exports = {
         // }
         return res;
     },
+
+    getUserConnectionList: async (query, filter = {}) => {
+        return await Profile.find(query, filter).populate('connections');
+    },
     
 };

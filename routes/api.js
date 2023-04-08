@@ -23,6 +23,7 @@ router.get("/me", userAuth, profile.userProfile)
 router.put("/me", userAuth, profile.updateProfile)
 router.post("/me/add/social-accounts", userAuth, profile.addSocialAccountInProfile)
 
+router.get("/me/connection/list", userAuth, profile.userConnectionList)
 router.get("/me/connect/:connectProfileId", userAuth, profile.connectByUserId)
 router.get("/me/disconnect/:connectProfileId", userAuth, profile.disLikeByPostId)
 
