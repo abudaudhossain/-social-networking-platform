@@ -148,7 +148,7 @@ module.exports = {
 
 
             const usersProfileList = await getBasicProfileInfo({});
-          
+
             let resData = usersListRes(usersProfileList)
 
             native.response({
@@ -174,7 +174,7 @@ module.exports = {
             const { userId } = req.params;
 
             const usersProfile = await getUserProfile({ user: userId });
-            
+
             let resData = profileRes(usersProfile[0])
 
             native.response({
@@ -195,4 +195,76 @@ module.exports = {
             }, req, res)
         }
     },
+
+
+    connectByUserId: async (req, res) => {
+        try {
+            const profileId = req.nativeRequest.setProfile;
+            const { connectProfileId } = req.params;
+
+            const user = await updateUserProfile({ _id: profileId }, { $addToSet: { connections: connectProfileId } });
+
+            // let resData = postRes(post)
+            native.response(
+                {
+                    errorLog: {},
+                    data: user,
+                    meta: {},
+                    status: 200,
+                },
+                req,
+                res
+            );
+        } catch (error) {
+            console.log(error);
+            handlers(
+                {
+                    errorLog: {
+                        location: req.originalUrl.split("/").join("::"),
+                        query: `WELCOME LIKE POST BY ID TO WEBSITE BLOCK`,
+                        details: `Error : ${error}`,
+                    },
+                    error,
+                },
+                req,
+                res
+            );
+        }
+    },
+
+    disLikeByPostId: async (req, res) => {
+        try {
+            const profileId = req.nativeRequest.setProfile;
+            const { connectProfileId } = req.params;
+
+            const user = await updateUserProfile({ _id: profileId }, { $pull: { connections: connectProfileId } });
+
+            // let resData = postRes(post)
+            native.response(
+                {
+                    errorLog: {},
+                    data: user,
+                    meta: {},
+                    status: 200,
+                },
+                req,
+                res
+            );
+        } catch (error) {
+            console.log(error);
+            handlers(
+                {
+                    errorLog: {
+                        location: req.originalUrl.split("/").join("::"),
+                        query: `WELCOME LIKE POST BY ID TO WEBSITE BLOCK`,
+                        details: `Error : ${error}`,
+                    },
+                    error,
+                },
+                req,
+                res
+            );
+        }
+    }
+
 }

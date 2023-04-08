@@ -42,7 +42,7 @@ const field = {
     connections: [
         {// @relation
             type: mongoose.Types.ObjectId,
-            ref: "AppUser",
+            ref: "AppProfile",
         }
     ],
 
