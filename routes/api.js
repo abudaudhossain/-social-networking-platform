@@ -9,6 +9,7 @@ const auth = require('../app/controllers/auth');
 const userAuth = require('../app/middleware/userAuth');
 const profile = require('../app/controllers/profile');
 const post = require('../app/controllers/post');
+const comment = require('../app/controllers/comment');
 
 
 router.get('/', userAuth, welcome.welcome)
@@ -31,9 +32,13 @@ router.get("/me/post/:postId", userAuth, post.postDetailsById)
 router.put("/me/post/:postId", userAuth, post.updatePostById)
 router.delete("/me/post/:postId", userAuth, post.deletePostById)
 
+router.put("/me/comment/:commentId", userAuth, comment.updateCommentById)
+router.delete("/me/comment/:commentId", userAuth, comment.deleteCommentById)
 
 router.get("/post/like/:postId", userAuth, post.likeByPostId)
 router.get("/post/dislike/:postId", userAuth, post.disLikeByPostId)
 router.get("/post/share/:postId", userAuth, post.shareByPostId)
+
+router.post("/post/comment/:postId", userAuth, comment.createComment)
 
 module.exports = router;
