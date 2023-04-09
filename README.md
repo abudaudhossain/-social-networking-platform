@@ -1,5 +1,28 @@
 # Social Networking Platform System
 
+### Features
+
+**Back-EndUser registration and login:** 
+- Users can create new accounts and log in to the platform.
+- Passwords were encrypted and stored securely.
+- Users can edit and manage their profile information.
+
+**Profiles Management:**
+- Users will create a new profile, including a
+- profile picture, bio, and links to their other social media accounts.
+- Users  can view other user's profile 
+
+**Posts Management:**
+- Users can create new posts, which will include text and images.
+- Users will be able to like, comment on, and share posts.
+- Users will be able to search for posts by keyword.
+
+**Connections Management:**
+- Users will be connected with other users and view their
+- posts in a feed.
+- Users will be able to see a list of their connections and manage
+their connections.
+
 ## Tech Stack
 
 **Back-End:** 
