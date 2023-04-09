@@ -26,7 +26,8 @@ module.exports = {
             "likes",
             "comments",
             "shares",
-            "user"
+            "user",
+            "sharePost"
             
         ];
         for (let i = 0; i < keys.length; i++) {

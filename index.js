@@ -15,7 +15,8 @@ app.use(express.urlencoded({
 }));
 
 //database connection with mongoose
-const dbURL = `mongodb://localhost:27017/${process.env.DB_NAME}`;
+const dbURL = `mongodb://127.0.0.1:27017/${process.env.DB_NAME}`;
+// const dbURL = `mongodb://localhost:27017/${process.env.DB_NAME}`;
 
 mongoose.connect(dbURL, {
   useNewUrlParser: true,

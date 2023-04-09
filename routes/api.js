@@ -41,7 +41,7 @@ router.delete("/me/comment/:commentId", userAuth, comment.deleteCommentById)
 
 router.get("/post/like/:postId", userAuth, post.likeByPostId)
 router.get("/post/dislike/:postId", userAuth, post.disLikeByPostId)
-router.get("/post/share/:postId", userAuth, post.shareByPostId)
+router.post("/post/share/:postId", userAuth, post.shareByPostId)
 
 router.post("/post/comment/:postId", userAuth, comment.createComment)
 

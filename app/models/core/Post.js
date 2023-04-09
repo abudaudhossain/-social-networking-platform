@@ -40,7 +40,7 @@ const field = {
             ref: "AppProfile",
         }
     ],
-    sharesPost:
+    sharePost:
     {// @relation
         type: mongoose.Types.ObjectId,
         ref: "AppPost",

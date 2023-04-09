@@ -17,11 +17,11 @@ module.exports = {
             return error;
         }
     },
-    getUserAllPost: async (query, filter = {}) => {
-        return await Post.find(query, filter).populate('user');;
+    getUserAllPost: async (query, filter = {existence:0, status: 0}) => {
+        return await Post.find(query, filter).populate('user', ["name", "image", "user"]);;
     },
     getUserPostById: async (query) => {
-        return await Post.find(query).populate('user');
+        return await Post.find(query,{existence:0, status: 0}).populate('user',["name", "image", "user"]).populate('likes',["name", "image", "user"]).populate('shares', ["name", "image", "user"]).populate('comments', ["name", "image", "user"]).populate('sharePost');
     },
     updatePost: async (filter, update) => {
         let res = await Post.findOneAndUpdate(filter, update, { new: true });

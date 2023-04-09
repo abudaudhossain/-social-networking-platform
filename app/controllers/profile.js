@@ -274,14 +274,14 @@ module.exports = {
         try {
             const userId = req.nativeRequest.setUserId;
 
-            const usersProfile = await getUserConnectionList({ user: userId }, { name: 1, email: 1, user: 1, image: 1 });
-
-
+            const userProfile = await getUserConnectionList({ user: userId }, { name: 1, email: 1, user: 1, image: 1 });
+            let {connections} = userProfile[0];
+            if(!connections) connections=[];
 
             native.response({
                 'responseCode': 'LIST_LOADED',
                 'errorLog': {},
-                'data': usersProfile,
+                'data': connections,
                 'status': 200
             }, req, res);
         } catch (error) {
