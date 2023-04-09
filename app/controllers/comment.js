@@ -1,10 +1,16 @@
 const ValidationError = require("../exceptions/ValidationError");
 const handlers = require("../exceptions/handlers");
 const native = require("../helpers/native");
-const { postRes, postsRes } = require("../helpers/postRes");
-const { createNewPost, getUserAllPost, updatePost, deletePost, getUserPostById } = require("../services/Post");
-const { createNewComment, updateComment, deleteComment } = require("../services/comment");
-const { updateInfoValidation } = require("../validation/validationHelpers/validationHelper");
+const { postRes } = require("../helpers/postRes");
+const { updatePost } = require("../services/Post");
+const {
+    createNewComment,
+    updateComment,
+    deleteComment,
+} = require("../services/comment");
+const {
+    updateInfoValidation,
+} = require("../validation/validationHelpers/validationHelper");
 
 const createComment = async (req, res) => {
     const userId = req.nativeRequest.setUserId;
@@ -14,37 +20,53 @@ const createComment = async (req, res) => {
         const keys = Object.keys(req.body);
 
         if (!keys.includes("description")) {
-            if (!keys.includes("image")) throw new ValidationError("Description or image Required")
+            if (!keys.includes("image"))
+                throw new ValidationError("Description or image Required");
         }
         updateInfoValidation(keys);
-        let comment = await createNewComment({ ...req.body, createdBy: userId, user: profileId, post: postId })
+        let comment = await createNewComment({
+            ...req.body,
+            createdBy: userId,
+            user: profileId,
+            post: postId,
+        });
 
-        const post = await updatePost({ _id: postId }, { $addToSet: { comments: comment._id } });
+        const post = await updatePost(
+            { _id: postId },
+            { $addToSet: { comments: comment._id } }
+        );
 
-        let resData = postRes(post)
+        let resData = postRes(post);
 
-        native.response({
-            'errorLog': {},
-            'data': {
-                "message": "Comment Insert SuccessFul",
-                "post": post,
-                "comment": comment
+        native.response(
+            {
+                errorLog: {},
+                data: {
+                    message: "Comment Insert SuccessFul",
+                    post: post,
+                    comment: comment,
+                },
+                status: 200,
             },
-            'status': 200
-        }, req, res);
+            req,
+            res
+        );
     } catch (error) {
-        console.log(error)
-        handlers({
-            'errorLog': {
-                'location': req.originalUrl.split("/").join("::"),
-                'query': `CREATE NEW POST TO WEBSITE BLOCK`,
-                'details': `Error : ${error}`
+        console.log(error);
+        handlers(
+            {
+                errorLog: {
+                    location: req.originalUrl.split("/").join("::"),
+                    query: `CREATE NEW POST TO WEBSITE BLOCK`,
+                    details: `Error : ${error}`,
+                },
+                error,
             },
-            error
-        }, req, res)
+            req,
+            res
+        );
     }
-
-}
+};
 
 const updateCommentById = async (req, res) => {
     let resData = {};
@@ -66,15 +88,17 @@ const updateCommentById = async (req, res) => {
             }
         }
 
-
-        const comment = await updateComment({ createdBy: userId, _id: commentId }, req.body);
-        if (!comment) throw new ValidationError("Can not Found Comment")
+        const comment = await updateComment(
+            { createdBy: userId, _id: commentId },
+            req.body
+        );
+        if (!comment) throw new ValidationError("Can not Found Comment");
         native.response(
             {
                 errorLog: {},
                 data: {
                     message: "Update Successful",
-                    updateInfo: comment
+                    updateInfo: comment,
                 },
                 meta: {},
                 status: 200,
@@ -97,18 +121,23 @@ const updateCommentById = async (req, res) => {
             res
         );
     }
-}
+};
 const deleteCommentById = async (req, res) => {
     try {
         const userId = req.nativeRequest.setUserId;
         const { commentId } = req.params;
         let post = {};
 
-
-        const comment = await deleteComment({ createdBy: userId, _id: commentId });
-        console.log(comment)
+        const comment = await deleteComment({
+            createdBy: userId,
+            _id: commentId,
+        });
+        console.log(comment);
         if (comment) {
-            post = await updatePost({ _id: comment.post }, { $pull: { comments: comment._id } });
+            post = await updatePost(
+                { _id: comment.post },
+                { $pull: { comments: comment._id } }
+            );
         }
         // let resData = postRes(post)
         native.response(
@@ -117,7 +146,7 @@ const deleteCommentById = async (req, res) => {
                 data: {
                     message: "Delete Successful",
                     count: comment ? 1 : 0,
-                    post
+                    post,
                 },
                 meta: {},
                 status: 200,
@@ -140,12 +169,10 @@ const deleteCommentById = async (req, res) => {
             res
         );
     }
-}
-
-
+};
 
 module.exports = {
     createComment,
     updateCommentById,
-    deleteCommentById
-}
+    deleteCommentById,
+};

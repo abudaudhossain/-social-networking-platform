@@ -1,40 +1,57 @@
 const handlers = require("../exceptions/handlers");
 const native = require("../helpers/native");
 const { profileRes, usersListRes } = require("../helpers/userRes");
-const { updateInfoValidation } = require("../validation/validationHelpers/validationHelper");
-const { getUser, updateUser } = require("../services/user");
+const {
+    updateInfoValidation,
+} = require("../validation/validationHelpers/validationHelper");
+const { getUser } = require("../services/user");
 const ValidationError = require("../exceptions/ValidationError");
 const NotAcceptableError = require("../exceptions/NotAcceptableError");
-const { getUserProfile, updateUserProfile, getBasicProfileInfo, getUserConnectionList } = require("../services/profile");
+const {
+    getUserProfile,
+    updateUserProfile,
+    getBasicProfileInfo,
+    getUserConnectionList,
+} = require("../services/profile");
 
 module.exports = {
     userProfile: async (req, res) => {
-        console.log(req.nativeRequest.setUser)
-
+        console.log(req.nativeRequest.setUser);
 
         try {
             const userId = req.nativeRequest.setUserId;
 
             const usersProfile = await getUserProfile({ user: userId });
 
-            let resData = profileRes({ ...usersProfile[0]._doc, ...req.nativeRequest.setUser })
+            let resData = profileRes({
+                ...usersProfile[0]._doc,
+                ...req.nativeRequest.setUser,
+            });
 
-            native.response({
-                'responseCode': 'LIST_LOADED',
-                'errorLog': {},
-                'data': resData,
-                'status': 200
-            }, req, res);
-        } catch (error) {
-            console.log(error)
-            handlers({
-                'errorLog': {
-                    'location': req.originalUrl.split("/").join("::"),
-                    'query': `USER PROFILE TO WEBSITE BLOCK`,
-                    'details': `Error : ${error}`
+            native.response(
+                {
+                    responseCode: "LIST_LOADED",
+                    errorLog: {},
+                    data: resData,
+                    status: 200,
                 },
-                error
-            }, req, res)
+                req,
+                res
+            );
+        } catch (error) {
+            console.log(error);
+            handlers(
+                {
+                    errorLog: {
+                        location: req.originalUrl.split("/").join("::"),
+                        query: `USER PROFILE TO WEBSITE BLOCK`,
+                        details: `Error : ${error}`,
+                    },
+                    error,
+                },
+                req,
+                res
+            );
         }
     },
     updateProfile: async (req, res) => {
@@ -64,14 +81,14 @@ module.exports = {
             }
 
             const user = await updateUserProfile({ user: userId }, req.body);
-            let resData = profileRes(user)
+            let resData = profileRes(user);
             native.response(
                 {
                     responseCode: "UPDATE_SUCCESSFUL",
                     errorLog: {},
                     data: {
                         message: "Update Successful",
-                        updateInfo: resData
+                        updateInfo: resData,
                     },
                     meta: {},
                     status: 200,
@@ -98,10 +115,10 @@ module.exports = {
     addSocialAccountInProfile: async (req, res) => {
         try {
             const { socialAccount } = req.body;
-            if (!socialAccount) throw new ValidationError("Social Account Required")
+            if (!socialAccount)
+                throw new ValidationError("Social Account Required");
 
             const userId = req.nativeRequest.setUserId;
-
 
             const users = await getUserProfile({
                 user: userId,
@@ -109,9 +126,11 @@ module.exports = {
             let socialMediaAccounts = users[0].socialMediaAccounts;
             socialMediaAccounts.push(socialAccount);
 
-
-            const result = await updateUserProfile({ user: userId }, { socialMediaAccounts });
-            let resData = profileRes(result)
+            const result = await updateUserProfile(
+                { user: userId },
+                { socialMediaAccounts }
+            );
+            let resData = profileRes(result);
 
             native.response(
                 {
@@ -119,7 +138,7 @@ module.exports = {
                     errorLog: {},
                     data: {
                         message: "Update Successful",
-                        updateInfo: resData
+                        updateInfo: resData,
                     },
                     meta: {},
                     status: 200,
@@ -145,28 +164,34 @@ module.exports = {
     },
     profileList: async (req, res) => {
         try {
-
-
             const usersProfileList = await getBasicProfileInfo({});
 
-            let resData = usersListRes(usersProfileList)
+            let resData = usersListRes(usersProfileList);
 
-            native.response({
-                'responseCode': 'LIST_LOADED',
-                'errorLog': {},
-                'data': resData,
-                'status': 200
-            }, req, res);
-        } catch (error) {
-            console.log(error)
-            handlers({
-                'errorLog': {
-                    'location': req.originalUrl.split("/").join("::"),
-                    'query': `USER PROFILE LIST TO WEBSITE BLOCK`,
-                    'details': `Error : ${error}`
+            native.response(
+                {
+                    responseCode: "LIST_LOADED",
+                    errorLog: {},
+                    data: resData,
+                    status: 200,
                 },
-                error
-            }, req, res)
+                req,
+                res
+            );
+        } catch (error) {
+            console.log(error);
+            handlers(
+                {
+                    errorLog: {
+                        location: req.originalUrl.split("/").join("::"),
+                        query: `USER PROFILE LIST TO WEBSITE BLOCK`,
+                        details: `Error : ${error}`,
+                    },
+                    error,
+                },
+                req,
+                res
+            );
         }
     },
     profileByUserId: async (req, res) => {
@@ -175,24 +200,32 @@ module.exports = {
 
             const usersProfile = await getUserProfile({ user: userId });
 
-            let resData = profileRes(usersProfile[0])
+            let resData = profileRes(usersProfile[0]);
 
-            native.response({
-                'responseCode': 'LIST_LOADED',
-                'errorLog': {},
-                'data': resData,
-                'status': 200
-            }, req, res);
-        } catch (error) {
-            console.log(error)
-            handlers({
-                'errorLog': {
-                    'location': req.originalUrl.split("/").join("::"),
-                    'query': `USER PROFILE LIST TO WEBSITE BLOCK`,
-                    'details': `Error : ${error}`
+            native.response(
+                {
+                    responseCode: "LIST_LOADED",
+                    errorLog: {},
+                    data: resData,
+                    status: 200,
                 },
-                error
-            }, req, res)
+                req,
+                res
+            );
+        } catch (error) {
+            console.log(error);
+            handlers(
+                {
+                    errorLog: {
+                        location: req.originalUrl.split("/").join("::"),
+                        query: `USER PROFILE LIST TO WEBSITE BLOCK`,
+                        details: `Error : ${error}`,
+                    },
+                    error,
+                },
+                req,
+                res
+            );
         }
     },
 
@@ -201,7 +234,10 @@ module.exports = {
             const profileId = req.nativeRequest.setProfile;
             const { connectProfileId } = req.params;
 
-            const user = await updateUserProfile({ _id: profileId }, { $addToSet: { connections: connectProfileId } });
+            const user = await updateUserProfile(
+                { _id: profileId },
+                { $addToSet: { connections: connectProfileId } }
+            );
 
             // let resData = postRes(post)
             native.response(
@@ -236,7 +272,10 @@ module.exports = {
             const profileId = req.nativeRequest.setProfile;
             const { connectProfileId } = req.params;
 
-            const user = await updateUserProfile({ _id: profileId }, { $pull: { connections: connectProfileId } });
+            const user = await updateUserProfile(
+                { _id: profileId },
+                { $pull: { connections: connectProfileId } }
+            );
 
             // let resData = postRes(post)
             native.response(
@@ -269,31 +308,40 @@ module.exports = {
     userConnectionList: async (req, res) => {
         // console.log(req.nativeRequest.setUser)
 
-
         try {
             const userId = req.nativeRequest.setUserId;
 
-            const userProfile = await getUserConnectionList({ user: userId }, { name: 1, email: 1, user: 1, image: 1 });
-            let {connections} = userProfile[0];
-            if(!connections) connections=[];
+            const userProfile = await getUserConnectionList(
+                { user: userId },
+                { name: 1, email: 1, user: 1, image: 1 }
+            );
+            let { connections } = userProfile[0];
+            if (!connections) connections = [];
 
-            native.response({
-                'responseCode': 'LIST_LOADED',
-                'errorLog': {},
-                'data': connections,
-                'status': 200
-            }, req, res);
-        } catch (error) {
-            console.log(error)
-            handlers({
-                'errorLog': {
-                    'location': req.originalUrl.split("/").join("::"),
-                    'query': `USER PROFILE TO WEBSITE BLOCK`,
-                    'details': `Error : ${error}`
+            native.response(
+                {
+                    responseCode: "LIST_LOADED",
+                    errorLog: {},
+                    data: connections,
+                    status: 200,
                 },
-                error
-            }, req, res)
+                req,
+                res
+            );
+        } catch (error) {
+            console.log(error);
+            handlers(
+                {
+                    errorLog: {
+                        location: req.originalUrl.split("/").join("::"),
+                        query: `USER PROFILE TO WEBSITE BLOCK`,
+                        details: `Error : ${error}`,
+                    },
+                    error,
+                },
+                req,
+                res
+            );
         }
     },
-
-}
+};

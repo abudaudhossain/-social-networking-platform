@@ -1,9 +1,4 @@
-// const useragent = require('useragent'); // module
-// const system = require('./system'); // native
 const utils = require('./utils'); // native
-
-
-// const SysActivity = require('../models/system/Activity'); // mongoose model
 
 
 const response = async (v, req, res) => {

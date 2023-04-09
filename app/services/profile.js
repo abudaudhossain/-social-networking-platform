@@ -6,7 +6,7 @@ module.exports = {
     createNewProfile: async (data) => {
         try {
             const saveData = {
-                ...data
+                ...data,
             };
 
             const newUserProfile = new Profile(saveData);
@@ -22,7 +22,10 @@ module.exports = {
         return await Profile.find(query, filter);
     },
 
-    getBasicProfileInfo: async (query, filter = { name: 1, email: 1, user: 1, image: 1 }) => {
+    getBasicProfileInfo: async (
+        query,
+        filter = { name: 1, email: 1, user: 1, image: 1 }
+    ) => {
         return await Profile.find(query, filter);
     },
 
@@ -38,7 +41,6 @@ module.exports = {
     },
 
     getUserConnectionList: async (query, filter = {}) => {
-        return await Profile.find(query, filter).populate('connections');
+        return await Profile.find(query, filter).populate("connections");
     },
-    
 };

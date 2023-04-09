@@ -12,12 +12,14 @@ const field = {
     },
     image: {
         type: String,
-        default: null
+        default: null,
     },
-    likes: [{
-        type: mongoose.Types.ObjectId,
-        ref: "AppProfile",
-    }],
+    likes: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "AppProfile",
+        },
+    ],
 
     user: {
         // @relation
@@ -42,13 +44,12 @@ const field = {
         default: "active",
         enum: {
             values: ["active", "inactive"],
-            message: "User role value can't be {VALUE}, must be active/inactive",
+            message:
+                "User role value can't be {VALUE}, must be active/inactive",
         },
     },
-
-}
-
+};
 
 const appCommentSchema = mongoose.Schema(field, { timestamps: true });
 
-module.exports = mongoose.model('AppComment', appCommentSchema)
+module.exports = mongoose.model("AppComment", appCommentSchema);

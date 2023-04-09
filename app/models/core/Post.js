@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const field = {
     description: {
         type: String,
-        default: null
+        default: null,
     },
     image: {
         type: String,
-        default: null
+        default: null,
     },
     createdBy: {
         // @relation
@@ -26,27 +26,27 @@ const field = {
         {
             type: mongoose.Types.ObjectId,
             ref: "AppProfile",
-        }
+        },
     ],
     comments: [
-        {// @relation
+        {
+            // @relation
             type: mongoose.Types.ObjectId,
             ref: "AppComment",
-        }
+        },
     ],
     shares: [
-        {// @relation
+        {
+            // @relation
             type: mongoose.Types.ObjectId,
             ref: "AppProfile",
-        }
+        },
     ],
-    sharePost:
-    {// @relation
+    sharePost: {
+        // @relation
         type: mongoose.Types.ObjectId,
         ref: "AppPost",
-    }
-    ,
-
+    },
     existence: {
         // true false
         type: Boolean,
@@ -57,13 +57,12 @@ const field = {
         default: "active",
         enum: {
             values: ["active", "inactive"],
-            message: "User role value can't be {VALUE}, must be active/inactive",
+            message:
+                "User role value can't be {VALUE}, must be active/inactive",
         },
     },
-
-}
-
+};
 
 const appPostSchema = mongoose.Schema(field, { timestamps: true });
 
-module.exports = mongoose.model('AppPost', appPostSchema)
+module.exports = mongoose.model("AppPost", appPostSchema);

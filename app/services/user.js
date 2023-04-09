@@ -6,7 +6,7 @@ module.exports = {
     createNewUser: async (data) => {
         try {
             const saveData = {
-                ...data
+                ...data,
             };
 
             if (data.password) {
@@ -32,7 +32,11 @@ module.exports = {
         return await User.find(query, filter);
     },
     getLoginUser: async (query) => {
-        return await User.find(query, { socialMediaAccounts: 0, image: 0, bio: 0 });
+        return await User.find(query, {
+            socialMediaAccounts: 0,
+            image: 0,
+            bio: 0,
+        });
     },
     updateUser: async (filter, update) => {
         let res = await User.findOneAndUpdate(filter, update, { new: true });
@@ -44,7 +48,5 @@ module.exports = {
         }
         return res;
     },
-    saveToken: async (filter, token) => {
-
-    }
+    saveToken: async (filter, token) => {},
 };

@@ -21,12 +21,11 @@ const field = {
     },
     phone: {
         type: String,
-
     },
 
     image: {
         type: String,
-        default: null
+        default: null,
     },
     socialMediaAccounts: [
         {
@@ -34,16 +33,17 @@ const field = {
                 type: String,
             },
             link: {
-                type: String
-            }
-        }
+                type: String,
+            },
+        },
     ],
 
     connections: [
-        {// @relation
+        {
+            // @relation
             type: mongoose.Types.ObjectId,
             ref: "AppProfile",
-        }
+        },
     ],
 
     existence: {
@@ -56,13 +56,12 @@ const field = {
         default: "active",
         enum: {
             values: ["active", "inactive"],
-            message: "User role value can't be {VALUE}, must be active/inactive",
+            message:
+                "User role value can't be {VALUE}, must be active/inactive",
         },
     },
-
-}
-
+};
 
 const appProfileSchema = mongoose.Schema(field, { timestamps: true });
 
-module.exports = mongoose.model('AppProfile', appProfileSchema)
+module.exports = mongoose.model("AppProfile", appProfileSchema);

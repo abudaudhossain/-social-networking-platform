@@ -5,16 +5,22 @@ const { getUser, getLoginUser } = require("../services/user");
 
 module.exports = async (req, res, next) => {
     try {
-
         req.nativeRequest = {};
         req.nativeRequest.requestTime = new Date().toUTCString();
         // @validation
         // json web token verification
         const JWToken = req.headers.authorization.split(" ")[1];
-        let decoded = JWT.verify(JWToken, process.env.JWT_KEY, (err, decoded) => {
-            if (err) throw new UnauthorizedError("JWT Is wrong.Please Login Now.");
-            return decoded;
-        });
+        let decoded = JWT.verify(
+            JWToken,
+            process.env.JWT_KEY,
+            (err, decoded) => {
+                if (err)
+                    throw new UnauthorizedError(
+                        "JWT Is wrong.Please Login Now."
+                    );
+                return decoded;
+            }
+        );
 
         const users = await getLoginUser({ _id: decoded._id });
         // console.log(users);
@@ -24,10 +30,14 @@ module.exports = async (req, res, next) => {
             );
 
         let user = users[0];
-        if (!(user.tokens.includes(JWToken))) throw new UnauthorizedError("Expired auth token")
+        if (!user.tokens.includes(JWToken))
+            throw new UnauthorizedError("Expired auth token");
 
-
-        req.nativeRequest.setUser = {username: user.username,email: user.email, userId: user._id};
+        req.nativeRequest.setUser = {
+            username: user.username,
+            email: user.email,
+            userId: user._id,
+        };
         req.nativeRequest.setUserId = user._id;
         req.nativeRequest.setProfile = user.user;
         req.nativeRequest.setJWToken = JWToken;

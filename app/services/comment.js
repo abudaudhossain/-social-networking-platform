@@ -1,11 +1,10 @@
 const Comment = require("../models/core/Comment");
 
-
 module.exports = {
     createNewComment: async (data) => {
         try {
             const saveData = {
-                ...data
+                ...data,
             };
 
             const newComment = new Comment(saveData);
@@ -17,7 +16,7 @@ module.exports = {
             return error;
         }
     },
-   
+
     updateComment: async (filter, update) => {
         let res = await Comment.findOneAndUpdate(filter, update, { new: true });
         return res;
@@ -26,5 +25,4 @@ module.exports = {
     deleteComment: async (query) => {
         return await Comment.findByIdAndDelete(query);
     },
-
 };
