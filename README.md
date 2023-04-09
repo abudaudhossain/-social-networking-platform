@@ -2,7 +2,7 @@
 
 ### Features
 
-**Back-EndUser registration and login:** 
+**User registration and login:** 
 - Users can create new accounts and log in to the platform.
 - Passwords were encrypted and stored securely.
 - Users can edit and manage their profile information.
