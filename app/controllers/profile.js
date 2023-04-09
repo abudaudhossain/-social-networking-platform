@@ -196,7 +196,6 @@ module.exports = {
         }
     },
 
-
     connectByUserId: async (req, res) => {
         try {
             const profileId = req.nativeRequest.setProfile;

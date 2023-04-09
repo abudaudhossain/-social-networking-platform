@@ -45,4 +45,8 @@ router.post("/post/share/:postId", userAuth, post.shareByPostId)
 
 router.post("/post/comment/:postId", userAuth, comment.createComment)
 
+router.get("/feeds", userAuth, post.feeds)
+router.get("/feeds/search/:keyword", userAuth, post.searchFeeds)
+
+
 module.exports = router;

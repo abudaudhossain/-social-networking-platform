@@ -18,7 +18,7 @@ module.exports = {
         }
     },
     getUserAllPost: async (query, filter = {existence:0, status: 0}) => {
-        return await Post.find(query, filter).populate('user', ["name", "image", "user"]);;
+        return await Post.find(query, filter).populate('user', ["name", "image", "user"]).populate('sharePost');
     },
     getUserPostById: async (query) => {
         return await Post.find(query,{existence:0, status: 0}).populate('user',["name", "image", "user"]).populate('likes',["name", "image", "user"]).populate('shares', ["name", "image", "user"]).populate('comments', ["name", "image", "user"]).populate('sharePost');

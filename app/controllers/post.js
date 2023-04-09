@@ -2,6 +2,7 @@ const ValidationError = require("../exceptions/ValidationError");
 const handlers = require("../exceptions/handlers");
 const native = require("../helpers/native");
 const { postRes, postsRes } = require("../helpers/postRes");
+const { isTagExist } = require("../helpers/utility");
 const {
     createNewPost,
     getUserAllPost,
@@ -9,6 +10,7 @@ const {
     deletePost,
     getUserPostById,
 } = require("../services/Post");
+const { getUserConnectionList } = require("../services/profile");
 const {
     updateInfoValidation,
 } = require("../validation/validationHelpers/validationHelper");
@@ -354,6 +356,111 @@ const shareByPostId = async (req, res) => {
     }
 };
 
+const searchFeeds = async (req, res) => {
+    let postsList = [];
+    let { keyword } = req.params;
+    try {
+        let posts = await getUserAllPost({});
+
+        for (let p = 0; p < posts.length; p++) {
+            let post = posts[p];
+            if (isTagExist([keyword], post.description)) {
+                postsList.push(post);
+            } else {
+                if (isTagExist([keyword], post?.sharePost?.description)) {
+                    postsList.push(post);
+                }
+            }
+        }
+        postsList = postsList.sort(function (a, b) {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        native.response(
+            {
+                responseCode: "LIST_LOADED",
+                errorLog: {},
+                data: {
+                    count: postsList.length,
+                    feeds: postsList,
+                },
+                status: 200,
+            },
+            req,
+            res
+        );
+    } catch (error) {
+        console.log(error);
+        handlers(
+            {
+                errorLog: {
+                    location: req.originalUrl.split("/").join("::"),
+                    query: `USER PROFILE TO WEBSITE BLOCK`,
+                    details: `Error : ${error}`,
+                },
+                error,
+            },
+            req,
+            res
+        );
+    }
+};
+
+const feeds = async (req, res) => {
+    let postsList = [];
+    try {
+        const userId = req.nativeRequest.setUserId;
+
+        const userProfile = await getUserConnectionList(
+            { user: userId },
+            { name: 1, email: 1, user: 1, image: 1 }
+        );
+        let { connections } = userProfile[0];
+        if (!connections) connections = [];
+
+        let posts = await getUserAllPost({ createdBy: userId });
+        postsList = [...postsList, ...posts];
+
+        for (let c = 0; c < connections.length; c++) {
+            let { user } = connections[c];
+            let posts = await getUserAllPost({ createdBy: user });
+            postsList = [...postsList, ...posts];
+        }
+
+        postsList = postsList.sort(function (a, b) {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        native.response(
+            {
+                responseCode: "LIST_LOADED",
+                errorLog: {},
+                data: {
+                    count: postsList.length,
+                    feeds: postsList,
+                },
+                status: 200,
+            },
+            req,
+            res
+        );
+    } catch (error) {
+        console.log(error);
+        handlers(
+            {
+                errorLog: {
+                    location: req.originalUrl.split("/").join("::"),
+                    query: `USER PROFILE TO WEBSITE BLOCK`,
+                    details: `Error : ${error}`,
+                },
+                error,
+            },
+            req,
+            res
+        );
+    }
+};
+
 module.exports = {
     createPost,
     getPostsList,
@@ -363,4 +470,6 @@ module.exports = {
     likeByPostId,
     disLikeByPostId,
     shareByPostId,
+    feeds,
+    searchFeeds,
 };
